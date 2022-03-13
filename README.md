@@ -1,3 +1,6 @@
+
+  ![version](https://img.shields.io/github/v/tag/Geet-George/quickdrop?color=teal&label=LATEST%20VERSION&style=for-the-badge)
+
 # Working with quickdrop
 
 1. Clone this repository to run your script (with the instructions below)
