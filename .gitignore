@@ -1,0 +1,24 @@
+# Mac files
+.DS_Store
+
+# Data directories (too storage-heavy for Git)
+Data/
+flight_segments/
+
+# build and dist
+build/
+dist/
+
+# Virtual environment directory
+joanne_env/
+
+# Test folders
+test_setup/
+
+# Byte-compiled / optimized / DLL files
+**/__pycache__/
+**/*.py[cod]
+**/*$py.class
+
+# VScode files
+.vscode/
