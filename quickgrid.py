@@ -11,7 +11,7 @@ import metpy.calc as mpcalc
 from metpy.units import units
 
 
-def grid_together(flight_dir, max_alt=14000, vertical_spacing=10):
+def grid_together(flight_dir, max_alt=14000, vertical_spacing=10,fullness_threshold=0.2):
 
     l1_dir = flight_dir.l1dir
 
@@ -22,20 +22,30 @@ def grid_together(flight_dir, max_alt=14000, vertical_spacing=10):
     check_vars = ["alt", "pres", "u_wind", "v_wind", "lat", "lon", "mr"]
 
     g = 0
+    fail_counter = 0
+    fail_sondes = []
     for i in tqdm(allfiles):
 
         sonde = i.replace(f"{l1_dir}", "").replace("QC.nc", "")
 
         check_vars = ["pres", "u_wind", "v_wind", "lat", "lon", "mr"]
         ds = xr.open_dataset(i)
-        sum_list = np.array([ds[var].sum().values for var in check_vars])
+        fraction_list = np.array([(ds[var].count(dim='time') / ds.time.count()).values for var in check_vars])
 
-        if len(np.where(sum_list == 0)[0]) != 0:
+        where_fraction = np.where(fraction_list <= fullness_threshold)
 
-            print_msg = f"For sonde {sonde}, variable/s {check_vars[np.where(sum_list==0)[0][0]]} found to have zero sum. Ignoring this sonde now for quicklooks purposes. Check later during final QC."
+        vars_low_fraction = ', '.join([check_vars[i] for i in where_fraction[0]])
+        str_fraction_with_vars = ''.join([f'{check_vars[i]} : {fraction_list[i]}'+'\n' for i in where_fraction[0]])
+
+        if len(where_fraction[0]) != 0:
+
+            print_msg = f"For sonde {sonde}, variable/s {vars_low_fraction} found to have profile fullness less than {fullness_threshold}. Ignoring this sonde now for quicklooks purposes. Check this sonde later during final QC. Following are the relevant profile-fullness fractions."+"\n"+f"{str_fraction_with_vars}"
 
             logging.info(print_msg)
             print(print_msg)
+
+            fail_counter += 1
+            fail_sondes.append(sonde)
 
         else:
 
@@ -59,6 +69,12 @@ def grid_together(flight_dir, max_alt=14000, vertical_spacing=10):
 
     ds_list = list(filter(None, ori_list))
     ds_flight = xr.concat(ds_list, dim="launch_time")
+
+    fail_sondes_list = ''.join(fail_sondes)
+
+    logging.info(
+        f"{fail_counter} out of the {len(allfiles)} sondes provided did not contain enough data and hence have been excluded from this quick processing."
+    )
 
     logging.info(
         f"Gridded all individual sondes for {l1_dir} at {vertical_spacing} m vertical resolution to {max_alt} m"
