@@ -9,8 +9,8 @@ flight_segments/
 build/
 dist/
 
-# Virtual environment directory
-joanne_env/
+# log files
+**/*.log
 
 # Test folders
 test_setup/
