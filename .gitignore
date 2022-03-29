@@ -4,6 +4,7 @@
 # Data directories (too storage-heavy for Git)
 Data/
 flight_segments/
+**/*.nc
 
 # build and dist
 build/
@@ -22,3 +23,4 @@ test_setup/
 
 # VScode files
 .vscode/
+**/*.code-workspace
