@@ -3,7 +3,7 @@
 
 # Working with quickdrop
 
-1. Clone this repository to run your script (with the instructions below)
+1. Clone this repository
 
 2. The data should be stored in the following structure
 
