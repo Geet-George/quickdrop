@@ -14,15 +14,15 @@ class Paths:
     """
     
     def __init__(self,directory,flightdir):
-        self.dir = directory + flightdir + '/'
+        self.dir = os.path.join(directory,flightdir)
         self.flightdir = flightdir
-        self.l1dir = directory + flightdir + '/Level_1/'
+        self.l1dir = os.path.join(directory,flightdir,'Level_1')
 
         logging.info(f'Created Path Instance: Main:{directory}; Flight:{flightdir}')
 
     
     def quickplot_path(self):
-        qp_path = f'{self.dir}Quickplots/'
+        qp_path = os.path.join(self.dir,'Quickplots')
         if pp(qp_path).exists():
             logging.info(f'Path exists: {qp_path}')
         else:    
@@ -31,7 +31,7 @@ class Paths:
         return qp_path
 
     def quickgrid_nc_path(self):
-        qg_nc_path = f'{self.dir}HALO-AC3_HALO_Dropsondes_quickgrid_{self.flightdir}.nc'
+        qg_nc_path = os.path.join(self.dir,f'HALO-AC3_HALO_Dropsondes_quickgrid_{self.flightdir}.nc')
         if pp(qg_nc_path).is_file():
             logging.info(f'File found: {qg_nc_path}')
             return qg_nc_path 
