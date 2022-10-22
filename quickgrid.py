@@ -6,7 +6,6 @@ import logging
 from tqdm import tqdm
 from tqdm import trange
 
-from metpy.future import precipitable_water
 import metpy.calc as mpcalc
 from metpy.units import units
 
@@ -96,7 +95,7 @@ def derived_products(ds_flight):
 
     for i in range(len(ds_flight["launch_time"])):
 
-        iwv[i] = precipitable_water(
+        iwv[i] = mpcalc.precipitable_water(
             ds_flight["pres"].isel(launch_time=i).values * units.mbar,
             ds_flight["dp"].isel(launch_time=i).values * units.degC,
         ).magnitude

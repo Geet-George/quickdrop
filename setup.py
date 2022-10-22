@@ -24,7 +24,7 @@ setuptools.setup(
         "numpy>=1.18.5",
         "xarray>=0.20.0",
         "netCDF4>=1.5.0",
-        "MetPy>=0.12.2",
+        "MetPy>=1.0",
         "cartopy>=0.18.0"
     ],
 )
