@@ -4,6 +4,7 @@ import numpy as np
 from pathlib import Path as pp
 import logging
 import os.path
+import os
 import helper
 import plots
 import quickgrid
@@ -15,7 +16,10 @@ FORMAT = (
     "[%(asctime)s %(filename)s->%(funcName)s():%(lineno)s]%(levelname)s: %(message)s"
 )
 
-logging.basicConfig(filename="logs/paths.log", level=logging.INFO, format=FORMAT)
+filename="logs/paths.log"
+os.makedirs(os.path.dirname(filename), exist_ok=True)
+
+logging.basicConfig(filename=filename, level=logging.INFO, format=FORMAT)
 logging.info(f"{os.path.basename(__file__)} run as {__name__} ...")
 
 logging.config.dictConfig({
